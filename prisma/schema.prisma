@@ -9,3 +9,45 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                 Int     @id @default(autoincrement())
+  login              String  @unique
+  password           String
+  email              String
+  name               String
+  githubNick         String
+  connectToGithub    Boolean
+  profileDescription String
+  Group              Group?
+  Post               Post[]
+}
+
+enum GroupType {
+  LANGUAGE
+  PROJECT
+  COMPANY
+  COMMUNITY
+}
+
+model Group {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String
+  type        GroupType
+  isPrivate   Boolean
+  repoLink    String
+  ownerId     Int       @unique
+  Post        Post[]
+  User        User      @relation(fields: [ownerId], references: [id])
+}
+
+model Post {
+  id       Int    @id @default(autoincrement())
+  title    String
+  content  String
+  authorId Int
+  groupId  Int
+  Group    Group  @relation(fields: [groupId], references: [id])
+  User     User   @relation(fields: [authorId], references: [id])
+}
