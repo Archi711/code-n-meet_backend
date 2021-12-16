@@ -11,14 +11,14 @@ datasource db {
 }
 
 model User {
-  id                 Int     @id @default(autoincrement())
-  login              String  @unique
+  id                 Int      @id @default(autoincrement())
+  login              String   @unique
   password           String
   email              String
-  name               String
-  githubNick         String
-  connectToGithub    Boolean
-  profileDescription String
+  name               String?
+  githubNick         String?
+  connectToGithub    Boolean?
+  profileDescription String?
   Group              Group?
   Post               Post[]
 }
@@ -36,7 +36,7 @@ model Group {
   description String
   type        GroupType
   isPrivate   Boolean
-  repoLink    String
+  repoLink    String?
   ownerId     Int       @unique
   Post        Post[]
   User        User      @relation(fields: [ownerId], references: [id])
