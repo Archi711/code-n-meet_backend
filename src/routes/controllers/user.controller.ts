@@ -1,11 +1,27 @@
-import { Request, RequestHandler } from 'express'
-import { LoginRequestData } from '../../types/index'
-import { getUserByCredentials } from '../services/users.service'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { LoginRequestData, RegisterRequestData } from '../../types/index'
+import { getUserByCredentials, saveNewUser } from '../services/user.service'
+import { sendError } from '../../types/utils'
 
-const UserController: {
-  [key: string]: RequestHandler<any, any, any, any, any>
-} = {
-  login: (req: Request<null, null, LoginRequestData>, res, next) => {
-    const user = getU
+const UserController = {
+  login: async (
+    req: Request<any, any, LoginRequestData>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const userOrError = await getUserByCredentials(req.body)
+    return userOrError instanceof Error
+      ? sendError(userOrError, res)
+      : res.json(userOrError)
+  },
+  register: async (
+    req: Request<any, any, RegisterRequestData>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const user = await saveNewUser(req.body)
+    return user ? res.sendStatus(200) : res.sendStatus(500)
   },
 }
+
+export default UserController
