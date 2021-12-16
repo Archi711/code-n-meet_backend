@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es2017"
+    ],
+    "module": "commonjs",
+    "declaration": false,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "newLine": "LF"
+  }
+}
