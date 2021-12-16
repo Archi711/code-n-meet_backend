@@ -8,3 +8,5 @@ export type RegisterRequestData = {
   password: string
   email: string
 }
+
+export type RequestDataTypes = LoginRequestData | RegisterRequestData

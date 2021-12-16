@@ -6,6 +6,6 @@ const UserController: {
   [key: string]: RequestHandler<any, any, any, any, any>
 } = {
   login: (req: Request<null, null, LoginRequestData>, res, next) => {
-    const user = getU
+    const user = getUserByCredentials(req.body)
   },
 }
