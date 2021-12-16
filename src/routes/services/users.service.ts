@@ -1,7 +1,8 @@
 import { LoginRequestData, RegisterRequestData } from '../../types/index'
 import prisma from '../../lib/prisma'
+import { Service } from './index'
 
-const UsersService = {
+const UsersService = Service({
   getUserByCredentials: async (body: LoginRequestData) => {
     return await prisma.user.findFirst({
       where: body,
@@ -12,6 +13,6 @@ const UsersService = {
       data: body,
     })
   },
-}
+})
 
 export const { getUserByCredentials, saveNewUser } = UsersService

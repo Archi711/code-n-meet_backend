@@ -2,7 +2,10 @@ import consola from 'consola'
 import isEmpty from 'lodash/isEmpty'
 import usersService from './users.service'
 import express from 'express'
-
+function t<V extends string, T extends { [key in string]: V }>(o: T): T {
+  return o
+}
+const asServiceTypes = <T>(et: { [K in keyof T]: ServiceAction }) => et
 const router = express()
 
 export type ServiceAction = (params: any) => Promise<any>
@@ -21,7 +24,8 @@ export function buildHandler(handler: ServiceAction): any | false {
 }
 
 export function Service(servicesObject: { [key: string]: ServiceAction }) {
-  const service = {}
+  const typesSrv = asServiceTypes(servicesObject)
+  const service: { [key: keyof typeof typesSrv]: ServiceAction } = {}
   Object.entries(servicesObject).forEach(
     ([key, handler]) => (service[key] = buildHandler(handler))
   )
