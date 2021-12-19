@@ -6,3 +6,4 @@
 
 - APP_PORT _optional_
 - DATABASE_URL **REQUIRED** - postgresql db url
+- JWT_SECRET
