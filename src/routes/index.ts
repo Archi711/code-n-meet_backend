@@ -8,9 +8,9 @@ import {
 
 const router = express()
 
-/////////////////////////////////////////
+// ///////////////////////////////////////
 // auth routes
-/////////////////////////////////////////
+// ///////////////////////////////////////
 router.post(
   '/login',
   validate(LoginRequestDataValidation),
@@ -19,7 +19,7 @@ router.post(
 router.post(
   '/register',
   validate(RegisterRequestDataValidation),
-  UserController.register
+  UserController.signup
 )
 
 export default router

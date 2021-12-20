@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import jwt from 'jsonwebtoken'
+import { NextFunction, Request, Response } from 'express'
 import { LoginRequestData, RegisterRequestData } from '../../types/index'
 import { getUserByCredentials, saveNewUser } from '../services/user.service'
 import { sendError } from '../../types/utils'
@@ -12,13 +12,16 @@ const UserController = {
   ) => {
     const userOrError = await getUserByCredentials(req.body)
     if (userOrError instanceof Error) sendError(userOrError, res)
-    const token = jwt.sign({ id: userOrError.id }, process.env.JWT_SECRET as string)
+    const token = jwt.sign(
+      { id: userOrError.id },
+      process.env.JWT_SECRET as string
+    )
     return res.json({
       token,
-      user: userOrError
+      user: userOrError,
     })
   },
-  register: async (
+  signup: async (
     req: Request<any, any, RegisterRequestData>,
     res: Response,
     next: NextFunction

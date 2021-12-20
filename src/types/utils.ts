@@ -1,10 +1,9 @@
 import { Response } from 'express'
-import HttpStatusCode from './HttpStatusCode'
-
+import { StatusCodes } from 'http-status-codes'
 export class RequestError extends Error {
-  status: HttpStatusCode
-  constructor(status: HttpStatusCode) {
-    super(HttpStatusCode[status])
+  status: StatusCodes
+  constructor(status: StatusCodes) {
+    super(StatusCodes[status])
     this.status = status
   }
 }
@@ -12,5 +11,5 @@ export class RequestError extends Error {
 export const sendError = (error: Error, res: Response) => {
   error instanceof RequestError
     ? res.sendStatus(error.status)
-    : res.sendStatus(500)
+    : res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
 }

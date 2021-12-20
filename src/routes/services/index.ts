@@ -15,7 +15,7 @@ export function buildHandler(handler: any) {
 }
 
 export const createService = <T extends { [key: string]: any }>(serv: T): T => {
-  let res: any = new Object()
+  const res: any = {}
   Object.entries(serv).forEach(
     ([key, value]) => (res[key] = buildHandler(value))
   )
