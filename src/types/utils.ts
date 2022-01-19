@@ -8,8 +8,8 @@ export class RequestError extends Error {
   }
 }
 
-export const sendError = (error: Error, res: Response) => {
-  error instanceof RequestError
+export const sendError = (error: Error | RequestError, res: Response) => {
+  'status' in error
     ? res.sendStatus(error.status)
     : res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
 }

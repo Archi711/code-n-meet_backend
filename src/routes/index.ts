@@ -17,9 +17,11 @@ router.post(
   UserController.login
 )
 router.post(
-  '/register',
+  '/signup',
   validate(RegisterRequestDataValidation),
   UserController.signup
 )
+
+router.get('/users/:id', UserController.getById)
 
 export default router

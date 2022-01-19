@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -8,9 +8,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const jwtPayload = jwt.verify(token, process.env.JWT_SECRET as string)
     req.body.jwtPayload = jwtPayload
     return next()
-  }
-  catch (e) {
+  } catch (e) {
     return res.sendStatus(403)
   }
-
 }
