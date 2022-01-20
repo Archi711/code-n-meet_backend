@@ -7,6 +7,7 @@ const validate =
   async (req, res, next) => {
     try {
       consola.info('validate')
+      consola.log(req.query)
       schema.body && (await schema.body.validate(req.body))
       schema.query && (await schema.query.validate(req.query))
       schema.params && (await schema.params.validate(req.params))

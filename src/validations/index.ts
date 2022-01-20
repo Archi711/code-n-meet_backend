@@ -35,3 +35,10 @@ export const GetByIdValidation: RequestValidationSchema = {
     id: Yup.number().required(),
   }),
 }
+
+export const GetUserGroupsValidation: RequestValidationSchema = {
+  query: Yup.object({
+    id: Yup.number().required(),
+    privacy: Yup.string().oneOf(['all', 'private', 'public']).required(),
+  }),
+}

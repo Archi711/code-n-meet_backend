@@ -26,7 +26,7 @@ const UserService = createService({
       },
     })
     if (!user || !compareSync(body.password, user.password))
-      throw new RequestError(404)
+      return new RequestError(404)
     return omit(user, 'password')
   },
   getUserById: async (id: number) => {
@@ -34,7 +34,7 @@ const UserService = createService({
       select: UserDataSelect,
       where: { id },
     })
-    if (!user) throw new RequestError(404)
+    if (!user) return new RequestError(404)
     return user
   },
   saveNewUser: async (body: RegisterRequestData) => {

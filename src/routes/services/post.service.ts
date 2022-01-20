@@ -29,7 +29,7 @@ export const PostService = createService({
         },
       },
     })
-    if (!posts) throw new RequestError(404)
+    if (!posts) return new RequestError(404)
     return posts
   },
   getGroupPosts: async (id: number) => {
@@ -41,7 +41,7 @@ export const PostService = createService({
         },
       },
     })
-    if (!posts) throw new RequestError(404)
+    if (!posts) return new RequestError(404)
     return posts
   },
 })
