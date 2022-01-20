@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { sendError } from '../../types/utils'
-import { getGroupPosts, getUserPosts } from '../services/posts.service'
+import { getGroupPosts, getUserPosts } from '../services/post.service'
 
-const PostsController = {
+const PostController = {
   getUserPosts: async (req: Request, res: Response) => {
     const postsOrError = await getUserPosts(+req.params.id)
     if (postsOrError instanceof Error) return sendError(postsOrError, res)
@@ -15,4 +15,4 @@ const PostsController = {
   },
 }
 
-export default PostsController
+export default PostController

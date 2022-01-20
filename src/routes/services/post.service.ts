@@ -1,4 +1,4 @@
-import { RequestError } from './../../types/utils'
+import { RequestError } from '../../types/utils'
 import prisma from '../../lib/prisma'
 import { createService } from './index'
 
@@ -19,7 +19,7 @@ const PostResponseSelect = {
     },
   },
 }
-export const PostsService = createService({
+export const PostService = createService({
   getUserPosts: async (id: number) => {
     const posts = await prisma.post.findMany({
       select: PostResponseSelect,
@@ -46,4 +46,4 @@ export const PostsService = createService({
   },
 })
 
-export const { getGroupPosts, getUserPosts } = PostsService
+export const { getGroupPosts, getUserPosts } = PostService
