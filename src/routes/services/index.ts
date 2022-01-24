@@ -3,9 +3,9 @@ import isEmpty from 'lodash/isEmpty'
 import { RequestError } from '../../types/utils'
 
 export function buildHandler(handler: any) {
-  return async function (param: any): Promise<any | false> {
+  return async function (...params: any): Promise<any | false> {
     try {
-      const result = await handler(param)
+      const result = await handler(...params)
       if (isEmpty(result)) throw new RequestError(404)
       else return result
     } catch (e: any) {

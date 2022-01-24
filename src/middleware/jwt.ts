@@ -6,7 +6,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!token) return res.sendStatus(401)
   try {
     const jwtPayload = jwt.verify(token, process.env.JWT_SECRET as string)
-    req.body.jwtPayload = jwtPayload
+    req.body = {
+      ...req.body,
+      jwtPayload
+    }
     return next()
   } catch (e) {
     return res.sendStatus(403)

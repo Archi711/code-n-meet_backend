@@ -1,5 +1,6 @@
 import { RequestValidationSchema } from '../types/index'
 import * as Yup from 'yup'
+import { GroupType } from '@prisma/client'
 export const LoginRequestDataValidation: RequestValidationSchema = {
   body: Yup.object({
     login: Yup.string().strict().required(),
@@ -41,4 +42,21 @@ export const GetUserGroupsValidation: RequestValidationSchema = {
     id: Yup.number().required(),
     privacy: Yup.string().oneOf(['all', 'private', 'public']).required(),
   }),
+}
+
+export const CreateGroupValidation: RequestValidationSchema = {
+  body: Yup.object({
+    name: Yup.string().min(2).max(64).required(),
+    description: Yup.string().max(1000).required(),
+    type: Yup.string().oneOf(Object.keys(GroupType)).required(),
+    isPrivate: Yup.bool(),
+    repoLink: Yup.string()
+  })
+}
+
+export const CreatePostValidation: RequestValidationSchema = {
+  body: Yup.object({
+    title: Yup.string().min(3).max(255).required(),
+    content: Yup.string().max(16000)
+  })
 }
