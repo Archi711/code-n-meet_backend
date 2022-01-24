@@ -5,6 +5,15 @@ export type LoginRequestData = {
   password: string
 }
 
+export type UserData = {
+  id: number
+  name: string
+  email: string
+  githubNick?: string
+  connectToGithub?: boolean
+  profileDescription?: string
+}
+
 export type RegisterRequestData = {
   login: string
   password: string
@@ -37,3 +46,7 @@ export type GroupCreateBody = {
   isPrivate: boolean
   repoLink?: string
 }
+
+export type EditProfileData = Partial<Omit<UserData, 'id'> & {
+  password: string
+}>

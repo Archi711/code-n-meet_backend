@@ -1,3 +1,4 @@
+import { EditProfileData } from './../../types/index';
 import { LoginRequestData, RegisterRequestData } from '../../types/index'
 import prisma from '../../lib/prisma'
 import { createService } from './index'
@@ -46,6 +47,19 @@ const UserService = createService({
       data,
     })
   },
+  updateUser: async (id: number, body: EditProfileData) => {
+    const data = {
+      ...body,
+      ...(body.password && { password: hashSync(body.password) })
+    }
+    return await prisma.user.update({
+      select: UserDataSelect,
+      where: {
+        id
+      },
+      data
+    })
+  }
 })
 
-export const { getUserByCredentials, saveNewUser, getUserById } = UserService
+export const { getUserByCredentials, saveNewUser, getUserById, updateUser } = UserService
