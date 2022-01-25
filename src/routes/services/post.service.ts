@@ -1,3 +1,4 @@
+import { PostBody } from './../../types/index'
 import { RequestError } from '../../types/utils'
 import prisma from '../../lib/prisma'
 import { createService } from './index'
@@ -44,6 +45,26 @@ export const PostService = createService({
     if (!posts) return new RequestError(404)
     return posts
   },
+  addPost: async (data: PostBody, id: number) => {
+    const post = await prisma.post.create({
+      select: PostResponseSelect,
+      data: {
+        title: data.title,
+        content: data.content,
+        Group: {
+          connect: {
+            id: data.idGroup,
+          },
+        },
+        User: {
+          connect: {
+            id,
+          },
+        },
+      },
+    })
+    return post
+  },
 })
 
-export const { getGroupPosts, getUserPosts } = PostService
+export const { getGroupPosts, getUserPosts, addPost } = PostService

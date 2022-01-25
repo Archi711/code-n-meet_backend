@@ -1,4 +1,10 @@
-import { CreateGroupValidation, EditProfileValidation, GetByIdValidation, GetUserGroupsValidation } from './../validations/index'
+import {
+  CreateGroupValidation,
+  CreatePostValidation,
+  EditProfileValidation,
+  GetByIdValidation,
+  GetUserGroupsValidation,
+} from './../validations/index'
 import express from 'express'
 import validate from './../middleware/validate'
 import UserController from './controllers/user.controller'
@@ -30,7 +36,11 @@ router.post(
 // user REST
 // //////////////////////////////////////
 router.get('/users/:id', UserController.getById)
-router.patch('/users/:id', [jwt, validate(EditProfileValidation)], UserController.updateUser)
+router.patch(
+  '/users/:id',
+  [jwt, validate(EditProfileValidation)],
+  UserController.updateUser
+)
 
 // /////////////////////////////////////
 // group REST
@@ -54,10 +64,7 @@ router.post(
   GroupController.createGroup
 )
 
-router.get(
-  '/groups',
-  GroupController.getGroups
-)
+router.get('/groups', GroupController.getGroups)
 
 // ///////////////////////////////////
 // posts REST
@@ -73,6 +80,12 @@ router.get(
   '/users/:id/posts',
   [validate(GetByIdValidation)],
   PostController.getUserPosts
+)
+
+router.post(
+  '/posts',
+  [jwt, validate(CreatePostValidation)],
+  PostController.addPost
 )
 
 export default router
