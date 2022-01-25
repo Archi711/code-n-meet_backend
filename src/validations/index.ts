@@ -50,15 +50,15 @@ export const CreateGroupValidation: RequestValidationSchema = {
     description: Yup.string().max(1000).required(),
     type: Yup.string().oneOf(Object.keys(GroupType)).required(),
     isPrivate: Yup.bool(),
-    repoLink: Yup.string()
-  })
+    repoLink: Yup.string(),
+  }),
 }
 
 export const CreatePostValidation: RequestValidationSchema = {
   body: Yup.object({
     title: Yup.string().min(3).max(255).required(),
-    content: Yup.string().max(16000)
-  })
+    content: Yup.string().min(32).max(16000).required(),
+  }),
 }
 
 export const EditProfileValidation: RequestValidationSchema = {
@@ -73,6 +73,6 @@ export const EditProfileValidation: RequestValidationSchema = {
     name: Yup.string(),
     profileDescription: Yup.string(),
     githubNick: Yup.string(),
-    connectWithGithub: Yup.bool()
-  })
+    connectWithGithub: Yup.bool(),
+  }),
 }
