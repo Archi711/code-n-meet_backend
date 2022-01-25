@@ -1,7 +1,12 @@
 import { sendError } from './../../types/utils'
 import { PostBody } from './../../types/index'
 import { Request, Response } from 'express'
-import { addPost, getGroupPosts, getUserPosts } from '../services/post.service'
+import {
+  addPost,
+  getGroupPosts,
+  getPost,
+  getUserPosts,
+} from '../services/post.service'
 
 const PostController = {
   getUserPosts: async (req: Request, res: Response) => {
@@ -19,6 +24,11 @@ const PostController = {
     res: Response
   ) => {
     const postOrError = await addPost(req.body, req.body.jwtPayload.id)
+    if (postOrError instanceof Error) return sendError(postOrError, res)
+    return res.json(postOrError)
+  },
+  getPost: async (req: Request, res: Response) => {
+    const postOrError = await getPost(Number(req.params.id))
     if (postOrError instanceof Error) return sendError(postOrError, res)
     return res.json(postOrError)
   },

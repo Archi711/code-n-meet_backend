@@ -88,4 +88,6 @@ router.post(
   PostController.addPost
 )
 
+router.get('/posts/:id', [validate(GetByIdValidation)], PostController.getPost)
+
 export default router

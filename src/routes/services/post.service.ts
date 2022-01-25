@@ -65,6 +65,15 @@ export const PostService = createService({
     })
     return post
   },
+  getPost: async (id: number) => {
+    const post = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+      select: PostResponseSelect,
+    })
+    return post
+  },
 })
 
-export const { getGroupPosts, getUserPosts, addPost } = PostService
+export const { getGroupPosts, getPost, getUserPosts, addPost } = PostService
