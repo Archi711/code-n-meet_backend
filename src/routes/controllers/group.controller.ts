@@ -1,8 +1,14 @@
-import { GroupCreateBody } from './../../types/index';
+import { GroupCreateBody } from './../../types/index'
 import { sendError } from './../../types/utils'
 import { Request, Response } from 'express'
-import { createGroup, getGroupById, getGroups, getUserGroups, GroupPrivacySP } from '../services/group.service'
-import { omit } from 'lodash';
+import {
+  createGroup,
+  getGroupById,
+  getGroups,
+  getUserGroups,
+  GroupPrivacySP,
+} from '../services/group.service'
+import { omit } from 'lodash'
 
 export default {
   getUserGroups: async (req: Request, res: Response) => {
@@ -27,14 +33,18 @@ export default {
     if (!!userInGroup && userId) return res.json(group)
     return res.sendStatus(403)
   },
-  createGroup: async (req: Request<any, any, GroupCreateBody & { jwtPayload: { id: number } }>, res: Response) => {
-    const userId = req.body?.jwtPayload?.id
-    if (!userId) return res.sendStatus(401)
-    const group = await createGroup(userId, omit(req.body, 'jwtPayload'))
+  createGroup: async (
+    req: Request<any, any, GroupCreateBody & { jwtPayload: { id: number } }>,
+    res: Response
+  ) => {
+    const group = await createGroup(
+      req.body.jwtPayload.id,
+      omit(req.body, 'jwtPayload')
+    )
     return res.json(group)
   },
   getGroups: async (req: Request, res: Response) => {
     const groups = await getGroups(req.query.skip ? +req.query.skip : undefined)
     return res.json(groups)
-  }
+  },
 }

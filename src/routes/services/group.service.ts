@@ -19,7 +19,7 @@ const GroupResponseSelect = {
   Users: {
     select: {
       id: true,
-      name: true
+      name: true,
     },
   },
 }
@@ -45,7 +45,7 @@ const GroupService = createService({
           },
         },
         ...(privacy === 'public' && { isPrivate: false }),
-        ...(privacy === 'private' && { isPrivate: true })
+        ...(privacy === 'private' && { isPrivate: true }),
       },
     })
     if (!groups) return new RequestError(404)
@@ -67,19 +67,22 @@ const GroupService = createService({
   },
   createGroup: async (id: number, body: GroupCreateBody) => {
     const group = await prisma.group.create({
+      select: {
+        id: true,
+      },
       data: {
         ...body,
         User: {
           connect: {
-            id
-          }
+            id,
+          },
         },
         Users: {
           connect: {
-            id
-          }
-        }
-      }
+            id,
+          },
+        },
+      },
     })
     return group
   },
@@ -87,13 +90,19 @@ const GroupService = createService({
     const groups = await prisma.group.findMany({
       select: GroupResponseSelect,
       where: {
-        isPrivate: false
+        isPrivate: false,
       },
       take: 10,
-      ...(skip && { skip })
+      ...(skip && { skip }),
     })
     return groups
-  }
+  },
 })
 
-export const { getGroupById, getUserGroups, getUserOwnedGroups, createGroup, getGroups } = GroupService
+export const {
+  getGroupById,
+  getUserGroups,
+  getUserOwnedGroups,
+  createGroup,
+  getGroups,
+} = GroupService

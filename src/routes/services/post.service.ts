@@ -47,7 +47,7 @@ export const PostService = createService({
   },
   addPost: async (data: PostBody, id: number) => {
     const post = await prisma.post.create({
-      select: PostResponseSelect,
+      select: { id: true },
       data: {
         title: data.title,
         content: data.content,
