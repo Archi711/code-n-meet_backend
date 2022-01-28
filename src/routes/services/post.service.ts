@@ -74,6 +74,15 @@ export const PostService = createService({
     })
     return post
   },
+  getPosts: async (page = 0) => {
+    const posts = await prisma.post.findMany({
+      select: PostResponseSelect,
+      take: 10,
+      skip: page * 10,
+    })
+    return posts
+  },
 })
 
-export const { getGroupPosts, getPost, getUserPosts, addPost } = PostService
+export const { getGroupPosts, getPost, getUserPosts, addPost, getPosts } =
+  PostService

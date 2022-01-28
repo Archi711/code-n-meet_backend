@@ -5,6 +5,7 @@ import {
   addPost,
   getGroupPosts,
   getPost,
+  getPosts,
   getUserPosts,
 } from '../services/post.service'
 
@@ -31,6 +32,12 @@ const PostController = {
     const postOrError = await getPost(Number(req.params.id))
     if (postOrError instanceof Error) return sendError(postOrError, res)
     return res.json(postOrError)
+  },
+  getPosts: async (req: Request, res: Response) => {
+    const page = Number(req.query.page) || 0
+    const postsOrError = await getPosts(page)
+    if (postsOrError instanceof Error) return sendError(postsOrError, res)
+    return res.json(postsOrError)
   },
 }
 

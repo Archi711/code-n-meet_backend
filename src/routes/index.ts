@@ -35,10 +35,10 @@ router.post(
 // //////////////////////////////////////
 // user REST
 // //////////////////////////////////////
-router.get('/users/:id', UserController.getById)
+router.get('/users/:id', [jwt(true)], UserController.getById)
 router.patch(
   '/users/:id',
-  [jwt(false), validate(EditProfileValidation)],
+  [jwt(), validate(EditProfileValidation)],
   UserController.updateUser
 )
 
@@ -48,19 +48,19 @@ router.patch(
 
 router.get(
   '/users/:id/groups',
-  [jwt(), validate(GetUserGroupsValidation)],
+  [jwt(true), validate(GetUserGroupsValidation)],
   GroupController.getUserGroups
 )
 
 router.get(
   '/groups/:id',
-  [jwt(), validate(GetByIdValidation)],
+  [jwt(true), validate(GetByIdValidation)],
   GroupController.getGroupById
 )
 
 router.post(
   '/groups',
-  [jwt(false), validate(CreateGroupValidation)],
+  [jwt(), validate(CreateGroupValidation)],
   GroupController.createGroup
 )
 
@@ -72,21 +72,23 @@ router.get('/groups', GroupController.getGroups)
 
 router.get(
   '/groups/:id/posts',
-  [jwt(), validate(GetByIdValidation)],
+  [jwt(true), validate(GetByIdValidation)],
   PostController.getGroupPosts
 )
 
 router.get(
   '/users/:id/posts',
-  [jwt(), validate(GetByIdValidation)],
+  [jwt(true), validate(GetByIdValidation)],
   PostController.getUserPosts
 )
 
 router.post(
   '/posts',
-  [jwt(false), validate(CreatePostValidation)],
+  [jwt(), validate(CreatePostValidation)],
   PostController.addPost
 )
+
+router.get('/posts', [jwt(true)], PostController.getPosts)
 
 router.get('/posts/:id', [validate(GetByIdValidation)], PostController.getPost)
 
