@@ -29,7 +29,7 @@ export default {
     if (!group.isPrivate) return res.json(group)
     const userId = req.body?.jwtPayload?.id
     // create a limit && || dict??
-    const userInGroup = group.Users.filter(({ id }) => id === userId)
+    const userInGroup = group.Users.filter(({ id }) => id === +userId)
     if (!!userInGroup && userId) return res.json(group)
     return res.sendStatus(403)
   },

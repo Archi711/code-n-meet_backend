@@ -38,7 +38,7 @@ router.post(
 router.get('/users/:id', UserController.getById)
 router.patch(
   '/users/:id',
-  [jwt, validate(EditProfileValidation)],
+  [jwt(false), validate(EditProfileValidation)],
   UserController.updateUser
 )
 
@@ -48,19 +48,19 @@ router.patch(
 
 router.get(
   '/users/:id/groups',
-  [validate(GetUserGroupsValidation)],
+  [jwt(), validate(GetUserGroupsValidation)],
   GroupController.getUserGroups
 )
 
 router.get(
   '/groups/:id',
-  [validate(GetByIdValidation)],
+  [jwt(), validate(GetByIdValidation)],
   GroupController.getGroupById
 )
 
 router.post(
   '/groups',
-  [jwt, validate(CreateGroupValidation)],
+  [jwt(false), validate(CreateGroupValidation)],
   GroupController.createGroup
 )
 
@@ -72,19 +72,19 @@ router.get('/groups', GroupController.getGroups)
 
 router.get(
   '/groups/:id/posts',
-  [validate(GetByIdValidation)],
+  [jwt(), validate(GetByIdValidation)],
   PostController.getGroupPosts
 )
 
 router.get(
   '/users/:id/posts',
-  [validate(GetByIdValidation)],
+  [jwt(), validate(GetByIdValidation)],
   PostController.getUserPosts
 )
 
 router.post(
   '/posts',
-  [jwt, validate(CreatePostValidation)],
+  [jwt(false), validate(CreatePostValidation)],
   PostController.addPost
 )
 
