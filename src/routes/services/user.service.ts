@@ -5,6 +5,7 @@ import { createService } from './index'
 import { hashSync, compareSync } from 'bcryptjs'
 import { RequestError } from '../../types/utils'
 import { omit } from 'lodash'
+import bcrypt from 'bcryptjs'
 
 const UserDataSelect = {
   id: true,
@@ -30,9 +31,9 @@ const UserService = createService({
       return new RequestError(404)
     return omit(user, 'password')
   },
-  getUserById: async (id: number) => {
+  getUserById: async (id: number, plain = false) => {
     const user = await prisma.user.findUnique({
-      select: UserDataSelect,
+      ...(!plain && { select: UserDataSelect }),
       where: { id },
     })
     if (!user) return new RequestError(404)
@@ -59,7 +60,15 @@ const UserService = createService({
       },
       data
     })
+  },
+  deleteUser: async (id: number) => {
+    await prisma.user.delete({
+      where: {
+        id
+      }
+    })
+    return {}
   }
 })
 
-export const { getUserByCredentials, saveNewUser, getUserById, updateUser } = UserService
+export const { getUserByCredentials, saveNewUser, getUserById, updateUser, deleteUser } = UserService

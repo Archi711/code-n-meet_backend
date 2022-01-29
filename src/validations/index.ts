@@ -76,3 +76,10 @@ export const EditProfileValidation: RequestValidationSchema = {
     connectWithGithub: Yup.bool(),
   }),
 }
+
+export const DeleteUserValidation: RequestValidationSchema = {
+  body: Yup.object({
+    id: Yup.number().required(),
+    password: Yup.string().required()
+  })
+}

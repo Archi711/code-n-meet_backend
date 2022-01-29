@@ -1,7 +1,11 @@
+import { RequestError } from './../../types/utils';
+import { StatusCodes } from 'http-status-codes';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { NextFunction, Request, Response } from 'express'
 import { EditProfileData, LoginRequestData, RegisterRequestData } from '../../types/index'
 import {
+  deleteUser,
   getUserByCredentials,
   getUserById,
   saveNewUser,
@@ -30,8 +34,10 @@ const UserController = {
   signup: async (
     req: Request<any, any, RegisterRequestData>,
     res: Response) => {
-    const user = await saveNewUser(req.body)
-    return user ? res.sendStatus(200) : res.sendStatus(500)
+    const userOrError = await saveNewUser(req.body)
+    if (userOrError instanceof Error) return sendError(userOrError, res)
+
+    return userOrError ? res.json({ success: true }) : res.json(new RequestError(500))
   },
   getById: async (req: Request, res: Response) => {
     const user = await getUserById(+req.params.id)
@@ -42,6 +48,17 @@ const UserController = {
     res: Response) => {
     const user = await updateUser(req.body.jwtPayload?.id, omit(req.body, 'jwtPayload'))
     return res.json(user)
+  },
+  deleteUser: async (
+    req: Request<any, any, { id: number, password: string }>,
+    res: Response
+  ) => {
+    const user = await getUserById(req.body.id, true)
+    if (user instanceof Error) return sendError(user, res)
+    if (!bcrypt.compareSync(req.body.password, user.password)) return res.json(new RequestError(StatusCodes.FORBIDDEN))
+    const confirmOrError = await deleteUser(req.body.id)
+    if (confirmOrError instanceof Error) return sendError(confirmOrError, res)
+    return res.json({ success: true })
   }
 }
 
