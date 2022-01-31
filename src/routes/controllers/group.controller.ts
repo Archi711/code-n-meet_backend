@@ -1,7 +1,8 @@
 import { GroupCreateBody } from './../../types/index'
-import { sendError } from './../../types/utils'
+import { RequestError, sendError } from './../../types/utils'
 import { Request, Response } from 'express'
 import {
+  addToGroup,
   createGroup,
   getGroupById,
   getGroups,
@@ -46,5 +47,15 @@ export default {
   getGroups: async (req: Request, res: Response) => {
     const groups = await getGroups(req.query.skip ? +req.query.skip : undefined)
     return res.json(groups)
+  },
+  addUserToGroup: async (req: Request, res: Response) => {
+    const updated = await addToGroup(Number(req.params.id), {
+      login: req.body.login,
+      id: req.body.id,
+    })
+    if (!req.body.login && !req.body.id)
+      return sendError(new RequestError(400), res)
+    if (updated instanceof Error) return sendError(updated, res)
+    return res.json({ success: true })
   },
 }

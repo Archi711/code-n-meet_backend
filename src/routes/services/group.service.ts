@@ -2,6 +2,7 @@ import { RequestError } from './../../types/utils'
 import prisma from '../../lib/prisma'
 import { createService } from './index'
 import { GroupCreateBody } from '../../types'
+import { LoginRequestDataValidation } from '../../validations'
 
 const GroupResponseSelect = {
   id: true,
@@ -97,6 +98,28 @@ const GroupService = createService({
     })
     return groups
   },
+  addToGroup: async (
+    id: number,
+    {
+      login,
+      id: uid,
+    }: {
+      login?: string
+      id?: number
+    }
+  ) => {
+    const connect = login ? { login } : uid ? { id: uid } : false
+    if (!connect) throw new RequestError(400)
+    const group = await prisma.group.update({
+      where: { id },
+      data: {
+        Users: {
+          connect,
+        },
+      },
+    })
+    return group
+  },
 })
 
 export const {
@@ -105,4 +128,5 @@ export const {
   getUserOwnedGroups,
   createGroup,
   getGroups,
+  addToGroup,
 } = GroupService

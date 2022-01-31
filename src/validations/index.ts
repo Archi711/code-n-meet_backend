@@ -80,6 +80,16 @@ export const EditProfileValidation: RequestValidationSchema = {
 export const DeleteUserValidation: RequestValidationSchema = {
   body: Yup.object({
     id: Yup.number().required(),
-    password: Yup.string().required()
-  })
+    password: Yup.string().required(),
+  }),
+}
+
+export const AddUserToGroupValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+  body: Yup.object({
+    login: Yup.string().optional(),
+    id: Yup.number().optional(),
+  }),
 }

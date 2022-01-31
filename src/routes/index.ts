@@ -1,11 +1,12 @@
 import {
+  AddUserToGroupValidation,
   CreateGroupValidation,
   CreatePostValidation,
   EditProfileValidation,
   GetByIdValidation,
   GetUserGroupsValidation,
 } from './../validations/index'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import validate from './../middleware/validate'
 import UserController from './controllers/user.controller'
 import {
@@ -62,6 +63,12 @@ router.post(
   '/groups',
   [jwt(), validate(CreateGroupValidation)],
   GroupController.createGroup
+)
+
+router.post(
+  '/groups/:id/addUserToGroup',
+  [jwt(), validate(AddUserToGroupValidation)],
+  GroupController.addUserToGroup
 )
 
 router.get('/groups', GroupController.getGroups)
