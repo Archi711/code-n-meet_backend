@@ -2,6 +2,7 @@ import {
   AddUserToGroupValidation,
   CreateGroupValidation,
   CreatePostValidation,
+  DeleteUserValidation,
   EditProfileValidation,
   GetByIdValidation,
   GetUserGroupsValidation,
@@ -42,6 +43,8 @@ router.patch(
   [jwt(), validate(EditProfileValidation)],
   UserController.updateUser
 )
+
+router.delete('/users/:id', [jwt(), validate(DeleteUserValidation)], UserController.deleteUser)
 
 // /////////////////////////////////////
 // group REST

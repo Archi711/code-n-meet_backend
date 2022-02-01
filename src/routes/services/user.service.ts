@@ -62,12 +62,12 @@ const UserService = createService({
     })
   },
   deleteUser: async (id: number) => {
-    await prisma.user.delete({
+    const user = await prisma.user.delete({
       where: {
         id
       }
     })
-    return {}
+    return user
   }
 })
 
