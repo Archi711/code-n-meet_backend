@@ -40,7 +40,7 @@ model Group {
   repoLink    String?
   ownerId     Int       @unique
   Post        Post[]
-  User        User      @relation(fields: [ownerId], references: [id])
+  User        User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   Users       User[]    @relation("UserGroups", references: [id])
 }
 
@@ -50,6 +50,6 @@ model Post {
   content  String
   authorId Int
   groupId  Int
-  Group    Group  @relation(fields: [groupId], references: [id])
-  User     User   @relation(fields: [authorId], references: [id])
+  Group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  User     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

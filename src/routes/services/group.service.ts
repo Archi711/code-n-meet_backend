@@ -120,6 +120,19 @@ const GroupService = createService({
     })
     return group
   },
+  removeFromGroup: async (gid: number, uid: number) => {
+    const group = await prisma.group.update({
+      where: { id: gid },
+      data: {
+        Users: {
+          disconnect: {
+            id: uid,
+          },
+        },
+      },
+    })
+    return group
+  },
 })
 
 export const {
@@ -129,4 +142,5 @@ export const {
   createGroup,
   getGroups,
   addToGroup,
+  removeFromGroup,
 } = GroupService

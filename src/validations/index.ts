@@ -93,3 +93,12 @@ export const AddUserToGroupValidation: RequestValidationSchema = {
     id: Yup.number().optional(),
   }),
 }
+
+export const RemoveUserFromGroupValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+  body: Yup.object({
+    id: Yup.number().required(),
+  }),
+}

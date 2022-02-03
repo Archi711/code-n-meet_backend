@@ -8,6 +8,7 @@ import {
   getGroups,
   getUserGroups,
   GroupPrivacySP,
+  removeFromGroup,
 } from '../services/group.service'
 import { omit } from 'lodash'
 
@@ -55,6 +56,11 @@ export default {
     })
     if (!req.body.login && !req.body.id)
       return sendError(new RequestError(400), res)
+    if (updated instanceof Error) return sendError(updated, res)
+    return res.json({ success: true })
+  },
+  removeFromGroup: async (req: Request, res: Response) => {
+    const updated = await removeFromGroup(Number(req.params.id), req.body.id)
     if (updated instanceof Error) return sendError(updated, res)
     return res.json({ success: true })
   },

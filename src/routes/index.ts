@@ -6,6 +6,7 @@ import {
   EditProfileValidation,
   GetByIdValidation,
   GetUserGroupsValidation,
+  RemoveUserFromGroupValidation,
 } from './../validations/index'
 import express, { NextFunction, Request, Response } from 'express'
 import validate from './../middleware/validate'
@@ -44,7 +45,11 @@ router.patch(
   UserController.updateUser
 )
 
-router.delete('/users/:id', [jwt(), validate(DeleteUserValidation)], UserController.deleteUser)
+router.delete(
+  '/users/:id',
+  [jwt(), validate(DeleteUserValidation)],
+  UserController.deleteUser
+)
 
 // /////////////////////////////////////
 // group REST
@@ -72,6 +77,12 @@ router.post(
   '/groups/:id/addUserToGroup',
   [jwt(), validate(AddUserToGroupValidation)],
   GroupController.addUserToGroup
+)
+
+router.post(
+  '/groups/:id/removeUserFromGroup',
+  [jwt(), validate(RemoveUserFromGroupValidation)],
+  GroupController.removeFromGroup
 )
 
 router.get('/groups', GroupController.getGroups)
