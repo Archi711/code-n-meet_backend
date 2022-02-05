@@ -134,6 +134,21 @@ const GroupService = createService({
     })
     return group
   },
+  editGroup: async (id: number, data: Partial<GroupCreateBody>) => {
+    const group = await prisma.group.update({
+      where: { id },
+      data
+    })
+    return group
+  },
+  deleteGroup: async (id: number) => {
+    const group = await prisma.group.delete({
+      where: {
+        id
+      }
+    })
+    return group
+  }
 })
 
 export const {
@@ -144,4 +159,6 @@ export const {
   getGroups,
   addToGroup,
   removeFromGroup,
+  editGroup,
+  deleteGroup
 } = GroupService

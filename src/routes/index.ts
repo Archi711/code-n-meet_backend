@@ -2,8 +2,10 @@ import {
   AddUserToGroupValidation,
   CreateGroupValidation,
   CreatePostValidation,
+  DeleteGroupValidation,
   DeletePostValidation,
   DeleteUserValidation,
+  EditGroupValidation,
   EditPostValidation,
   EditProfileValidation,
   GetByIdValidation,
@@ -89,6 +91,9 @@ router.post(
 
 router.get('/groups', GroupController.getGroups)
 
+router.patch('/groups/:id', [jwt(), validate(EditGroupValidation)], GroupController.editGroup)
+
+router.delete('/groups/:id', jwt(), validate(DeleteGroupValidation), GroupController.deleteGroup)
 // ///////////////////////////////////
 // posts REST
 // ///////////////////////////////////

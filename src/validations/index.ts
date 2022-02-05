@@ -125,3 +125,22 @@ export const DeletePostValidation: RequestValidationSchema = {
     id: Yup.number().required(),
   })
 }
+
+export const EditGroupValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+  body: Yup.object({
+    name: Yup.string().min(2).max(64),
+    description: Yup.string().max(1000),
+    type: Yup.string().oneOf(Object.keys(GroupType)),
+    isPrivate: Yup.bool(),
+    repoLink: Yup.string(),
+  }),
+}
+
+export const DeleteGroupValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+}

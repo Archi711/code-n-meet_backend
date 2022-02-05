@@ -1,9 +1,11 @@
-import { GroupCreateBody } from './../../types/index'
+import { EditGroupData, GroupCreateBody } from './../../types/index'
 import { RequestError, sendError } from './../../types/utils'
 import { Request, Response } from 'express'
 import {
   addToGroup,
   createGroup,
+  deleteGroup,
+  editGroup,
   getGroupById,
   getGroups,
   getUserGroups,
@@ -64,4 +66,23 @@ export default {
     if (updated instanceof Error) return sendError(updated, res)
     return res.json({ success: true })
   },
+  editGroup: async (req: Request<any, any, EditGroupData & { jwtPayload: { id: number } }>, res: Response) => {
+    const uid = req.body.jwtPayload.id
+    const gData = await getGroupById(Number(req.params.id))
+    if (gData instanceof Error) return sendError(gData, res)
+    if (gData.User.id !== uid) return sendError(new RequestError(403), res)
+    const group = await editGroup(Number(req.params.id), omit(req.body, 'jwtPayload'))
+    if (group instanceof Error) return sendError(group, res)
+    return res.json(group)
+  },
+  deleteGroup: async (req: Request<any, any, { jwtPayload: { id: number } }>, res: Response) => {
+    const uid = req.body.jwtPayload.id
+    const gData = await getGroupById(Number(req.params.id))
+    if (gData instanceof Error) return sendError(gData, res)
+    if (gData.User.id !== uid) return sendError(new RequestError(403), res)
+    const group = await deleteGroup(Number(req.params.id))
+    if (group instanceof Error) return sendError(group, res)
+    return res.json({ success: true })
+
+  }
 }
