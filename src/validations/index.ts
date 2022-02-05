@@ -115,3 +115,13 @@ export const EditPostValidation: RequestValidationSchema = {
     content: Yup.string().min(32).max(16000),
   })
 }
+export const DeletePostValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+  body: Yup.object({
+    idGroup: Yup.number().required(),
+    idUser: Yup.number().required(),
+    id: Yup.number().required(),
+  })
+}

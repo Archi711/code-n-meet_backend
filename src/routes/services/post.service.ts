@@ -83,6 +83,14 @@ export const PostService = createService({
     })
     return post
   },
+  deletePost: async (id: number) => {
+    const post = await prisma.post.delete({
+      where: {
+        id
+      }
+    })
+    return post
+  },
   getPost: async (id: number) => {
     const post = await prisma.post.findUnique({
       where: {
@@ -108,5 +116,6 @@ export const {
   getUserPosts,
   addPost,
   getPosts,
-  updatePost
+  updatePost,
+  deletePost
 } = PostService

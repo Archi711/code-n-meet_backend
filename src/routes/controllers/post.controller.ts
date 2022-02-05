@@ -1,8 +1,9 @@
 import { RequestError, sendError } from './../../types/utils'
-import { EditPostData, PostBody } from './../../types/index'
+import { DeletePostData, EditPostData, PostBody } from './../../types/index'
 import { Request, Response } from 'express'
 import {
   addPost,
+  deletePost,
   getGroupPosts,
   getPost,
   getPosts,
@@ -59,6 +60,19 @@ const PostController = {
     })
     if (postOrError instanceof Error) return sendError(postOrError, res)
     return res.json(postOrError)
+  },
+  deletePost: async (req: Request<any, any, DeletePostData & { jwtPayload: { id: number } }>, res: Response) => {
+    const uid = req.body.jwtPayload.id
+    const gid = req.body.idGroup
+    if (uid !== req.body.idUser) {
+      const userGroups = await getUserOwnedGroups(uid, 'all', true)
+      if (userGroups instanceof Error) return sendError(userGroups, res)
+      const isOwner = userGroups.reduce<boolean>((is, { id }) => is || id === gid, false)
+      if (!isOwner) return sendError(new RequestError(403), res)
+    }
+    const postOrError = await deletePost(req.body.id)
+    if (postOrError instanceof Error) return sendError(postOrError, res)
+    return res.json({ success: true })
   }
 }
 

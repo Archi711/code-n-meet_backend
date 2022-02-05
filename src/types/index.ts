@@ -60,3 +60,9 @@ export type EditPostData = {
 }
 
 export type EditGroupData = Partial<GroupCreateBody>
+
+export type DeletePostData = {
+  idGroup: number
+  idUser: number
+  id: number
+}

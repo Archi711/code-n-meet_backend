@@ -2,6 +2,7 @@ import {
   AddUserToGroupValidation,
   CreateGroupValidation,
   CreatePostValidation,
+  DeletePostValidation,
   DeleteUserValidation,
   EditPostValidation,
   EditProfileValidation,
@@ -116,4 +117,5 @@ router.get('/posts/:id', [validate(GetByIdValidation)], PostController.getPost)
 
 router.patch('/posts/:id', [jwt(), validate(EditPostValidation)], PostController.updatePost)
 
+router.delete('/posts/:id', [jwt(), validate(DeletePostValidation)], PostController.deletePost)
 export default router
