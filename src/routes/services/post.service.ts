@@ -1,7 +1,8 @@
-import { PostBody } from './../../types/index'
+import { EditPostData, PostBody } from './../../types/index'
 import { RequestError } from '../../types/utils'
 import prisma from '../../lib/prisma'
 import { createService } from './index'
+import { omit } from 'lodash'
 
 const PostResponseSelect = {
   id: true,
@@ -11,6 +12,11 @@ const PostResponseSelect = {
     select: {
       id: true,
       name: true,
+      User: {
+        select: {
+          id: true
+        }
+      }
     },
   },
   User: {
@@ -65,6 +71,18 @@ export const PostService = createService({
     })
     return post
   },
+  updatePost: async (data: EditPostData) => {
+    const post = await prisma.post.update({
+      where: {
+        id: data.id
+      },
+      data: {
+        ...(data.content && { content: data.content }),
+        ...(data.title && { title: data.title }),
+      }
+    })
+    return post
+  },
   getPost: async (id: number) => {
     const post = await prisma.post.findUnique({
       where: {
@@ -84,5 +102,11 @@ export const PostService = createService({
   },
 })
 
-export const { getGroupPosts, getPost, getUserPosts, addPost, getPosts } =
-  PostService
+export const {
+  getGroupPosts,
+  getPost,
+  getUserPosts,
+  addPost,
+  getPosts,
+  updatePost
+} = PostService

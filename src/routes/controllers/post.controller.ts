@@ -1,5 +1,5 @@
-import { sendError } from './../../types/utils'
-import { PostBody } from './../../types/index'
+import { RequestError, sendError } from './../../types/utils'
+import { EditPostData, PostBody } from './../../types/index'
 import { Request, Response } from 'express'
 import {
   addPost,
@@ -7,7 +7,9 @@ import {
   getPost,
   getPosts,
   getUserPosts,
+  updatePost,
 } from '../services/post.service'
+import { getUserOwnedGroups } from '../services/group.service'
 
 const PostController = {
   getUserPosts: async (req: Request, res: Response) => {
@@ -39,6 +41,25 @@ const PostController = {
     if (postsOrError instanceof Error) return sendError(postsOrError, res)
     return res.json(postsOrError)
   },
+  updatePost: async (req: Request<any, any, EditPostData & { jwtPayload: { id: number } }>, res: Response) => {
+    const uid = req.body.jwtPayload.id
+    const gid = req.body.idGroup
+    if (uid !== req.body.idUser) {
+      const userGroups = await getUserOwnedGroups(uid, 'all', true)
+      if (userGroups instanceof Error) return sendError(userGroups, res)
+      const isOwner = userGroups.reduce<boolean>((is, { id }) => is || id === gid, false)
+      if (!isOwner) return sendError(new RequestError(403), res)
+    }
+    const postOrError = await updatePost({
+      title: req.body.title,
+      content: req.body.content,
+      id: req.body.id,
+      idGroup: req.body.idGroup,
+      idUser: req.body.idUser
+    })
+    if (postOrError instanceof Error) return sendError(postOrError, res)
+    return res.json(postOrError)
+  }
 }
 
 export default PostController

@@ -50,3 +50,13 @@ export type GroupCreateBody = {
 export type EditProfileData = Partial<Omit<UserData, 'id'> & {
   password: string
 }>
+
+export type EditPostData = {
+  title?: string
+  content?: string
+  idGroup: number
+  idUser: number
+  id: number
+}
+
+export type EditGroupData = Partial<GroupCreateBody>

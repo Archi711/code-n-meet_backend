@@ -102,3 +102,16 @@ export const RemoveUserFromGroupValidation: RequestValidationSchema = {
     id: Yup.number().required(),
   }),
 }
+
+export const EditPostValidation: RequestValidationSchema = {
+  params: Yup.object({
+    id: Yup.number().required(),
+  }),
+  body: Yup.object({
+    idGroup: Yup.number().required(),
+    idUser: Yup.number().required(),
+    id: Yup.number().required(),
+    title: Yup.string().min(3).max(255),
+    content: Yup.string().min(32).max(16000),
+  })
+}

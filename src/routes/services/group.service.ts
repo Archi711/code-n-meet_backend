@@ -52,8 +52,9 @@ const GroupService = createService({
     if (!groups) return new RequestError(404)
     return groups
   },
-  getUserOwnedGroups: async (id: number, privacy: GroupPrivacySP) => {
+  getUserOwnedGroups: async (id: number, privacy: GroupPrivacySP, onlyIds = false) => {
     const groups = await prisma.group.findMany({
+      ...(onlyIds ? { select: { id: true } } : {}),
       where: {
         User: {
           id,
