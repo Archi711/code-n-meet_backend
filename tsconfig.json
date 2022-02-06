@@ -9,9 +9,16 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "noEmit": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "newLine": "LF"
-  }
+    "newLine": "LF",
+    "outDir": "dist"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
