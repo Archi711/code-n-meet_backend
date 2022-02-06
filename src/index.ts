@@ -11,6 +11,10 @@ const port = process.env.PORT || 4000
 
 app.use(cors())
 app.use(express.json())
+app.use((req, res, next) => {
+  consola.info(`HANDLING\nroute: (${req.method})[${req.path}]`)
+  return next()
+})
 app.use(routes)
 
 app.listen(port, () => {

@@ -1,8 +1,18 @@
-import jwt from 'jsonwebtoken';
-import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { LoginRequestData, RegisterRequestData } from '../../types/index'
-import { getUserByCredentials, saveNewUser } from '../services/user.service'
+import { RequestError } from './../../types/utils';
+import { StatusCodes } from 'http-status-codes';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
+import { NextFunction, Request, Response } from 'express'
+import { EditProfileData, LoginRequestData, RegisterRequestData } from '../../types/index'
+import {
+  deleteUser,
+  getUserByCredentials,
+  getUserById,
+  saveNewUser,
+  updateUser,
+} from '../services/user.service'
 import { sendError } from '../../types/utils'
+import omit from 'lodash/omit'
 
 const UserController = {
   login: async (
@@ -11,21 +21,45 @@ const UserController = {
     next: NextFunction
   ) => {
     const userOrError = await getUserByCredentials(req.body)
-    if (userOrError instanceof Error) sendError(userOrError, res)
-    const token = jwt.sign({ id: userOrError.id }, process.env.JWT_SECRET as string)
+    if (userOrError instanceof Error) return sendError(userOrError, res)
+    const token = jwt.sign(
+      { id: userOrError.id },
+      process.env.JWT_SECRET as string
+    )
     return res.json({
       token,
-      user: userOrError
+      user: userOrError,
     })
   },
-  register: async (
+  signup: async (
     req: Request<any, any, RegisterRequestData>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const user = await saveNewUser(req.body)
-    return user ? res.sendStatus(200) : res.sendStatus(500)
+    res: Response) => {
+    const userOrError = await saveNewUser(req.body)
+    if (userOrError instanceof Error) return sendError(userOrError, res)
+
+    return userOrError ? res.json({ success: true }) : res.json(new RequestError(500))
   },
+  getById: async (req: Request, res: Response) => {
+    const user = await getUserById(+req.params.id)
+    return res.json(user)
+  },
+  updateUser: async (
+    req: Request<any, any, Partial<EditProfileData> & { jwtPayload: { id: number } }>,
+    res: Response) => {
+    const user = await updateUser(req.body.jwtPayload?.id, omit(req.body, 'jwtPayload'))
+    return res.json(user)
+  },
+  deleteUser: async (
+    req: Request<any, any, { id: number, password: string }>,
+    res: Response
+  ) => {
+    const user = await getUserById(req.body.id, true)
+    if (user instanceof Error) return sendError(user, res)
+    if (!bcrypt.compareSync(req.body.password, user.password)) return res.json(new RequestError(StatusCodes.FORBIDDEN))
+    const confirmOrError = await deleteUser(req.body.id)
+    if (confirmOrError instanceof Error) return sendError(confirmOrError, res)
+    return res.json({ success: true })
+  }
 }
 
 export default UserController

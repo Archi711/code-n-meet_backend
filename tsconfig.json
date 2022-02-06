@@ -12,6 +12,13 @@
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "newLine": "LF"
-  }
+    "newLine": "LF",
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
